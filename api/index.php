@@ -14,5 +14,8 @@ foreach ($tmpDirs as $dir) {
     }
 }
 
+// Prevent Symfony/Laravel from treating /api as base URL prefix
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+
 // Forward Vercel serverless requests to Laravel public index
 require __DIR__ . '/../public/index.php';
