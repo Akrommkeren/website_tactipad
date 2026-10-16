@@ -1,0 +1,7 @@
+/vendor
+.git
+.github
+.env
+.env.*
+tests
+push_to_github.bat
