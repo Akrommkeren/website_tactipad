@@ -1,10 +1,10 @@
-# WEB-TACTIPAD: Media Tulis & Baca Braille Tuna Netra (30 Titik • 5 Huruf)
+# WEBISTE TACTIPAD: Media Tulis & Baca Braille Tuna Netra
 
 Aplikasi web pendidikan & assistive technology berbasis **Laravel 13** dan **Tailwind CSS** yang terintegrasi langsung dengan alat fisik **TACTIPAD** (papan tulis & baca Braille 30 titik dengan mekanisme reset masal).
 
 ---
 
-## 🌟 Halaman & Fitur Utama
+## Halaman & Fitur Utama
 
 ### 1. [Papan Utama Tactipad](http://localhost:8000/) (`/`)
 - Tampilan ramah mata dengan palet **soft white-slate & calming blue**, tanpa efek berlebihan.
