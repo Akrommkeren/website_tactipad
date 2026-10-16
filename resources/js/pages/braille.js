@@ -87,11 +87,8 @@ export function initBraillePage() {
                 const btn = document.querySelector(`button[data-cell="${c}"][data-dot="${d}"]`);
                 if (btn) {
                     const isFilled = cellDots.includes(d);
-                    if (isFilled) {
-                        btn.className = 'braille-dot-circle dot-filled-black w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none';
-                    } else {
-                        btn.className = 'braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none';
-                    }
+                    btn.classList.toggle('dot-filled-black', isFilled);
+                    btn.classList.toggle('dot-empty-clean', !isFilled);
                 }
             }
 

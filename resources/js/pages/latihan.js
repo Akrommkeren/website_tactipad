@@ -281,11 +281,8 @@ export function initLatihanPage() {
             const dot = Number(btn.getAttribute('data-dot'));
             const isActive = (userCells[cell] || []).includes(dot);
 
-            if (isActive) {
-                btn.className = 'quiz-dot dot-clean-filled w-11 h-11 sm:w-12 sm:h-12 rounded-full cursor-pointer focus:outline-none flex items-center justify-center';
-            } else {
-                btn.className = 'quiz-dot dot-clean-empty w-11 h-11 sm:w-12 sm:h-12 rounded-full cursor-pointer focus:outline-none flex items-center justify-center';
-            }
+            btn.classList.toggle('dot-clean-filled', isActive);
+            btn.classList.toggle('dot-clean-empty', !isActive);
         });
 
         const currentQ = currentFilteredQuestions[currentQuestionIndex];

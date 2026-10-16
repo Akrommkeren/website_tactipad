@@ -37,52 +37,52 @@
                 </div>
             </div>
 
-            <!-- THE 5-CELL TACTILE BOARD SURFACE -->
-            <div class="w-full overflow-x-auto py-2">
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 min-w-[780px] flex items-center justify-center inter-cell-gap">
+            <!-- THE 5-CELL TACTILE BOARD SURFACE (Responsive: 3+2 on mobile, 5 in row on desktop) -->
+            <div class="w-full py-2">
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-8 flex flex-wrap sm:flex-nowrap items-center justify-center gap-2.5 sm:gap-6">
 
                     <!-- 5 Cells -->
                     @for($cell = 1; $cell <= 5; $cell++)
-                    <div class="braille-cell-card flex-1 max-w-[130px] p-4 rounded-2xl bg-white border-2 border-slate-200 shadow-xs flex flex-col items-center transition hover:border-blue-400" data-cell="{{ $cell }}" id="cellCard_{{ $cell }}">
+                    <div class="braille-cell-card w-[98px] sm:w-auto sm:flex-1 sm:max-w-[130px] p-2.5 sm:p-4 rounded-2xl bg-white border-2 border-slate-200 shadow-xs flex flex-col items-center transition hover:border-blue-400 select-none touch-manipulation" data-cell="{{ $cell }}" id="cellCard_{{ $cell }}">
                         
                         <!-- Cell Header -->
-                        <div class="cell-header-label w-full text-center pb-2 mb-2 border-b border-slate-100 text-xs font-light text-blue-600 tracking-wider">
+                        <div class="cell-header-label w-full text-center pb-1.5 sm:pb-2 mb-1.5 sm:mb-2 border-b border-slate-100 text-[11px] sm:text-xs font-light text-blue-600 tracking-wider">
                             <span>Pola {{ $cell }}</span>
                         </div>
 
                         <!-- 2-Column x 3-Row Matrix (~0.5 mm gap) -->
-                        <div class="grid grid-cols-2 cell-dot-grid my-3">
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3 cell-dot-grid my-1.5 sm:my-3">
                             
                             <!-- Dot 1 & Dot 4 (Row 1) -->
-                            <button data-cell="{{ $cell }}" data-dot="1" class="braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none" aria-label="Huruf {{ $cell }} Titik 1">
+                            <button data-cell="{{ $cell }}" data-dot="1" class="braille-dot-circle dot-empty-clean w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none touch-manipulation active:scale-90" aria-label="Huruf {{ $cell }} Titik 1">
                                 <span class="sr-only">H{{ $cell }}T1</span>
                             </button>
-                            <button data-cell="{{ $cell }}" data-dot="4" class="braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none" aria-label="Huruf {{ $cell }} Titik 4">
+                            <button data-cell="{{ $cell }}" data-dot="4" class="braille-dot-circle dot-empty-clean w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none touch-manipulation active:scale-90" aria-label="Huruf {{ $cell }} Titik 4">
                                 <span class="sr-only">H{{ $cell }}T4</span>
                             </button>
 
                             <!-- Dot 2 & Dot 5 (Row 2) -->
-                            <button data-cell="{{ $cell }}" data-dot="2" class="braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none" aria-label="Huruf {{ $cell }} Titik 2">
+                            <button data-cell="{{ $cell }}" data-dot="2" class="braille-dot-circle dot-empty-clean w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none touch-manipulation active:scale-90" aria-label="Huruf {{ $cell }} Titik 2">
                                 <span class="sr-only">H{{ $cell }}T2</span>
                             </button>
-                            <button data-cell="{{ $cell }}" data-dot="5" class="braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none" aria-label="Huruf {{ $cell }} Titik 5">
+                            <button data-cell="{{ $cell }}" data-dot="5" class="braille-dot-circle dot-empty-clean w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none touch-manipulation active:scale-90" aria-label="Huruf {{ $cell }} Titik 5">
                                 <span class="sr-only">H{{ $cell }}T5</span>
                             </button>
 
                             <!-- Dot 3 & Dot 6 (Row 3) -->
-                            <button data-cell="{{ $cell }}" data-dot="3" class="braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none" aria-label="Huruf {{ $cell }} Titik 3">
+                            <button data-cell="{{ $cell }}" data-dot="3" class="braille-dot-circle dot-empty-clean w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none touch-manipulation active:scale-90" aria-label="Huruf {{ $cell }} Titik 3">
                                 <span class="sr-only">H{{ $cell }}T3</span>
                             </button>
-                            <button data-cell="{{ $cell }}" data-dot="6" class="braille-dot-circle dot-empty-clean w-11 h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none" aria-label="Huruf {{ $cell }} Titik 6">
+                            <button data-cell="{{ $cell }}" data-dot="6" class="braille-dot-circle dot-empty-clean w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center cursor-pointer focus:outline-none touch-manipulation active:scale-90" aria-label="Huruf {{ $cell }} Titik 6">
                                 <span class="sr-only">H{{ $cell }}T6</span>
                             </button>
 
                         </div>
 
                         <!-- Detected Letter on This Cell -->
-                        <div class="w-full pt-2 mt-1 border-t border-slate-100 text-center">
-                            <div class="text-2xl font-black text-blue-700 font-mono tracking-wider" id="cellChar_{{ $cell }}">-</div>
-                            <div class="text-xs font-mono text-slate-400 select-all" id="cellUnicode_{{ $cell }}">⠀</div>
+                        <div class="w-full pt-1.5 sm:pt-2 mt-1 border-t border-slate-100 text-center">
+                            <div class="text-xl sm:text-2xl font-black text-blue-700 font-mono tracking-wider" id="cellChar_{{ $cell }}">-</div>
+                            <div class="text-[11px] sm:text-xs font-mono text-slate-400 select-all" id="cellUnicode_{{ $cell }}">⠀</div>
                         </div>
 
                     </div>

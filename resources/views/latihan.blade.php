@@ -156,48 +156,48 @@
                     </div>
                 </div>
 
-                <!-- 5-CELL BOARD -->
-                <div id="multiCellBoard" class="hidden w-full overflow-x-auto py-2">
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 min-w-[760px] flex items-center justify-center inter-cell-gap">
+                <!-- 5-CELL BOARD (Responsive: 3+2 on mobile, 5 in row on desktop) -->
+                <div id="multiCellBoard" class="hidden w-full py-2">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-8 flex flex-wrap sm:flex-nowrap items-center justify-center gap-2.5 sm:gap-6">
                         @for($cell = 1; $cell <= 5; $cell++)
-                        <div class="braille-cell-card flex-1 max-w-[130px] p-4 rounded-2xl bg-white border-2 border-slate-200 shadow-xs flex flex-col items-center transition hover:border-blue-400" data-cell="{{ $cell }}">
+                        <div class="braille-cell-card w-[98px] sm:w-auto sm:flex-1 sm:max-w-[130px] p-2.5 sm:p-4 rounded-2xl bg-white border-2 border-slate-200 shadow-xs flex flex-col items-center transition hover:border-blue-400 select-none touch-manipulation" data-cell="{{ $cell }}">
                             
                             <!-- Cell Header -->
-                            <div class="w-full text-center pb-2 mb-2 border-b border-slate-100 text-xs font-light text-blue-600 tracking-wider">
+                            <div class="w-full text-center pb-1.5 sm:pb-2 mb-1.5 sm:mb-2 border-b border-slate-100 text-[11px] sm:text-xs font-light text-blue-600 tracking-wider">
                                 <span>Pola {{ $cell }}</span>
                             </div>
 
                             <!-- 2-Column x 3-Row Matrix -->
-                            <div class="grid grid-cols-2 cell-dot-grid my-3">
+                            <div class="grid grid-cols-2 gap-2 sm:gap-3 cell-dot-grid my-1.5 sm:my-3">
                                 <!-- Dot 1 & Dot 4 -->
-                                <button data-cell="{{ $cell }}" data-dot="1" class="quiz-dot dot-clean-empty w-11 h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center" aria-label="Pola {{ $cell }} Titik 1">
+                                <button data-cell="{{ $cell }}" data-dot="1" class="quiz-dot dot-clean-empty w-9 h-9 sm:w-11 sm:h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center touch-manipulation active:scale-90" aria-label="Pola {{ $cell }} Titik 1">
                                     <span class="sr-only">1</span>
                                 </button>
-                                <button data-cell="{{ $cell }}" data-dot="4" class="quiz-dot dot-clean-empty w-11 h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center" aria-label="Pola {{ $cell }} Titik 4">
+                                <button data-cell="{{ $cell }}" data-dot="4" class="quiz-dot dot-clean-empty w-9 h-9 sm:w-11 sm:h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center touch-manipulation active:scale-90" aria-label="Pola {{ $cell }} Titik 4">
                                     <span class="sr-only">4</span>
                                 </button>
 
                                 <!-- Dot 2 & Dot 5 -->
-                                <button data-cell="{{ $cell }}" data-dot="2" class="quiz-dot dot-clean-empty w-11 h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center" aria-label="Pola {{ $cell }} Titik 2">
+                                <button data-cell="{{ $cell }}" data-dot="2" class="quiz-dot dot-clean-empty w-9 h-9 sm:w-11 sm:h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center touch-manipulation active:scale-90" aria-label="Pola {{ $cell }} Titik 2">
                                     <span class="sr-only">2</span>
                                 </button>
-                                <button data-cell="{{ $cell }}" data-dot="5" class="quiz-dot dot-clean-empty w-11 h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center" aria-label="Pola {{ $cell }} Titik 5">
+                                <button data-cell="{{ $cell }}" data-dot="5" class="quiz-dot dot-clean-empty w-9 h-9 sm:w-11 sm:h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center touch-manipulation active:scale-90" aria-label="Pola {{ $cell }} Titik 5">
                                     <span class="sr-only">5</span>
                                 </button>
 
                                 <!-- Dot 3 & Dot 6 -->
-                                <button data-cell="{{ $cell }}" data-dot="3" class="quiz-dot dot-clean-empty w-11 h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center" aria-label="Pola {{ $cell }} Titik 3">
+                                <button data-cell="{{ $cell }}" data-dot="3" class="quiz-dot dot-clean-empty w-9 h-9 sm:w-11 sm:h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center touch-manipulation active:scale-90" aria-label="Pola {{ $cell }} Titik 3">
                                     <span class="sr-only">3</span>
                                 </button>
-                                <button data-cell="{{ $cell }}" data-dot="6" class="quiz-dot dot-clean-empty w-11 h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center" aria-label="Pola {{ $cell }} Titik 6">
+                                <button data-cell="{{ $cell }}" data-dot="6" class="quiz-dot dot-clean-empty w-9 h-9 sm:w-11 sm:h-11 rounded-full cursor-pointer focus:outline-none flex items-center justify-center touch-manipulation active:scale-90" aria-label="Pola {{ $cell }} Titik 6">
                                     <span class="sr-only">6</span>
                                 </button>
                             </div>
 
                             <!-- Detected Letter on This Cell -->
-                            <div class="w-full pt-2 mt-1 border-t border-slate-100 text-center">
-                                <div class="text-2xl font-black text-blue-700 font-mono tracking-wider multi-char-val" id="multiCharVal_{{ $cell }}">-</div>
-                                <div class="text-xs font-mono text-slate-400 select-all multi-char-uni" id="multiCharUni_{{ $cell }}">⠀</div>
+                            <div class="w-full pt-1.5 sm:pt-2 mt-1 border-t border-slate-100 text-center">
+                                <div class="text-xl sm:text-2xl font-black text-blue-700 font-mono tracking-wider multi-char-val" id="multiCharVal_{{ $cell }}">-</div>
+                                <div class="text-[11px] sm:text-xs font-mono text-slate-400 select-all multi-char-uni" id="multiCharUni_{{ $cell }}">⠀</div>
                             </div>
                         </div>
                         @endfor

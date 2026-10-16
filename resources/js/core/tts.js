@@ -1,22 +1,74 @@
 /**
  * TACTIPAD: Core Text-to-Speech (TTS) & Audio Feedback Engine
+ * Optimized for Mobile (iOS Safari & Android Chrome) and Desktop
  */
 
 let idVoice = null;
 let audioCtx = null;
+let isAudioUnlocked = false;
 
 export function loadVoices() {
     if (!('speechSynthesis' in window)) return;
     const voices = window.speechSynthesis.getVoices();
-    idVoice = voices.find(v => v.lang.includes('id') || v.name.includes('Indonesian')) || voices[0];
+    if (!voices || voices.length === 0) return;
+
+    const savedLang = localStorage.getItem('tactipad_lang') || 'id-ID';
+    const langPrefix = savedLang.split('-')[0].toLowerCase();
+
+    // Prioritas: Bahasa terpilih -> Indonesian -> Default
+    idVoice = voices.find(v => v.lang === savedLang || v.lang.replace('_', '-') === savedLang)
+        || voices.find(v => v.lang.toLowerCase().startsWith(langPrefix))
+        || voices.find(v => v.lang.includes('id') || v.name.toLowerCase().includes('indonesian'))
+        || voices[0];
+}
+
+/**
+ * Mobile Audio & Speech Unlocker:
+ * Mobile browsers require user interaction to unblock audio & speech synthesis
+ */
+export function unlockMobileAudio() {
+    if (isAudioUnlocked) return;
+    try {
+        const ctx = getAudioContext();
+        if (ctx && ctx.state === 'suspended') {
+            ctx.resume();
+        }
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.resume();
+            // Silent priming utterance for iOS Safari & Android Chrome
+            const prime = new SpeechSynthesisUtterance('');
+            prime.volume = 0;
+            window.speechSynthesis.speak(prime);
+        }
+        isAudioUnlocked = true;
+    } catch (e) {}
 }
 
 export function initTTS() {
     loadVoices();
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    if (typeof window !== 'undefined') {
+        if ('speechSynthesis' in window && window.speechSynthesis.onvoiceschanged !== undefined) {
             window.speechSynthesis.onvoiceschanged = loadVoices;
         }
+
+        // Auto-unlock on first mobile user gesture
+        const events = ['touchstart', 'touchend', 'pointerdown', 'click'];
+        const unlockHandler = () => {
+            unlockMobileAudio();
+            events.forEach(ev => window.removeEventListener(ev, unlockHandler));
+        };
+        events.forEach(ev => window.addEventListener(ev, unlockHandler, { passive: true, once: true }));
+    }
+}
+
+/**
+ * Haptic Vibration Feedback for Mobile Phones
+ */
+export function triggerHaptic(pattern = 15) {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+            navigator.vibrate(pattern);
+        } catch (e) {}
     }
 }
 
@@ -24,25 +76,44 @@ export function speak(text) {
     if (localStorage.getItem('tactipad_audio') === 'false') return;
     if (!('speechSynthesis' in window) || !text) return;
 
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    if (idVoice) utter.voice = idVoice;
-    utter.lang = 'id-ID';
+    try {
+        // Mobile browsers: resume speech queue if stuck or paused
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+        window.speechSynthesis.cancel();
 
-    const savedRate = parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
-    const savedPitch = parseFloat(localStorage.getItem('tactipad_pitch') || '1.0');
+        const utter = new SpeechSynthesisUtterance(text);
+        const savedLang = localStorage.getItem('tactipad_lang') || 'id-ID';
+        utter.lang = savedLang;
 
-    utter.rate = isNaN(savedRate) ? 1.0 : Math.max(0.5, Math.min(2.0, savedRate));
-    utter.pitch = isNaN(savedPitch) ? 1.0 : Math.max(0.5, Math.min(2.0, savedPitch));
+        if (idVoice && (idVoice.lang.startsWith(savedLang.split('-')[0]) || savedLang.includes('id'))) {
+            utter.voice = idVoice;
+        }
 
-    window.speechSynthesis.speak(utter);
+        const savedRate = parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
+        const savedPitch = parseFloat(localStorage.getItem('tactipad_pitch') || '1.0');
+        const savedVolume = parseFloat(localStorage.getItem('tactipad_volume') || '100');
+
+        utter.rate = isNaN(savedRate) ? 1.0 : Math.max(0.5, Math.min(2.0, savedRate));
+        utter.pitch = isNaN(savedPitch) ? 1.0 : Math.max(0.5, Math.min(2.0, savedPitch));
+        utter.volume = isNaN(savedVolume) ? 1.0 : Math.max(0, Math.min(1.0, savedVolume / 100));
+
+        window.speechSynthesis.speak(utter);
+    } catch (e) {
+        // Fallback tone if speech synthesis fails on mobile
+        playClickSound(880);
+    }
 }
 
 export function getAudioContext() {
     if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) {
+            audioCtx = new AudioClass();
+        }
     }
-    if (audioCtx.state === 'suspended') {
+    if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
     }
     return audioCtx;
@@ -50,8 +121,10 @@ export function getAudioContext() {
 
 export function playClickSound(freq = 950) {
     if (localStorage.getItem('tactipad_audio') === 'false') return;
+    triggerHaptic(12); // Subtle tactile feedback
     try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
@@ -67,6 +140,7 @@ export function playClickSound(freq = 950) {
 
 export function playResetClackSound() {
     if (localStorage.getItem('tactipad_audio') === 'false') return;
+    triggerHaptic([30, 25, 30]); // Double-tap tactile haptic for mass reset
     try {
         const ctx = getAudioContext();
         const now = ctx.currentTime;

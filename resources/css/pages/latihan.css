@@ -4,6 +4,18 @@
   =============================================================================
 */
 
+/* Mobile Touch Ergonomics */
+.quiz-dot {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.quiz-dot:active {
+    transform: scale(0.92);
+}
+
 .dot-clean-empty {
     background-color: #ffffff;
     border: 2px solid #94a3b8;
