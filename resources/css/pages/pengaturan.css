@@ -1,0 +1,27 @@
+/*
+  =============================================================================
+  TACTIPAD: Styles for Halaman Pengaturan
+  =============================================================================
+*/
+
+/* Mode Gelap pada Halaman Pengaturan */
+body.dark-theme #langDropdownMenu {
+    background-color: #111c38 !important;
+    border-color: #1e2b47 !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-theme .lang-option {
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .lang-option:hover {
+    background-color: #1e293b !important;
+    color: #60a5fa !important;
+}
+
+body.dark-theme #serialLogBox {
+    background-color: #070d19 !important;
+    border-color: #1e2b47 !important;
+    color: #93c5fd !important;
+}

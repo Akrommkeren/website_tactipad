@@ -1,0 +1,38 @@
+/*
+  =============================================================================
+  TACTIPAD: Styles for Halaman Kamus & Tentang
+  =============================================================================
+*/
+
+/* Mode Gelap pada Halaman Kamus & Tentang */
+body.dark-theme .bg-black {
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+body.dark-theme kbd {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #93c5fd !important;
+}
+
+body.dark-theme #filterDropdownMenu {
+    background-color: #111c38 !important;
+    border-color: #1e2b47 !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-theme #filterDropdownBtn {
+    background-color: #111c38 !important;
+    border-color: #1e2b47 !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark-theme .filter-item {
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .filter-item:hover {
+    background-color: #1e293b !important;
+    color: #60a5fa !important;
+}
