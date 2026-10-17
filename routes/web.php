@@ -9,6 +9,7 @@ Route::get('/latihan', [TactipadController::class, 'latihan'])->name('tactipad.l
 Route::get('/pengaturan', [TactipadController::class, 'pengaturan'])->name('tactipad.pengaturan');
 
 Route::get('/arduino-sketch', [TactipadController::class, 'downloadArduinoSketch'])->name('tactipad.sketch');
+Route::get('/tts', [TactipadController::class, 'getGoogleTTS'])->name('tactipad.tts');
 Route::post('/event', [TactipadController::class, 'pushEvent'])->name('tactipad.event');
 Route::post('/reset', [TactipadController::class, 'resetDevice'])->name('tactipad.reset');
 Route::get('/history', [TactipadController::class, 'getHistory'])->name('tactipad.history');

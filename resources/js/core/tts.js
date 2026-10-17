@@ -1,12 +1,13 @@
 /**
  * TACTIPAD: Core Text-to-Speech (TTS) & Audio Feedback Engine
- * Optimized for Mobile (iOS Safari & Android Chrome) and Desktop
+ * Default: Suara Bahasa Indonesia Versi Google (Desktop & Mobile)
  */
 
 let idVoice = null;
 let audioCtx = null;
 let isAudioUnlocked = false;
 let activeUtterance = null;
+let currentAudio = null;
 
 export function loadVoices() {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -16,12 +17,24 @@ export function loadVoices() {
     const savedLang = localStorage.getItem('tactipad_lang') || 'id-ID';
     const langPrefix = savedLang.split('-')[0].toLowerCase();
 
-    // Prioritas: Bahasa terpilih -> Indonesian (id atau in) -> Default -> Suara pertama
-    idVoice = voices.find(v => v.lang === savedLang || v.lang.replace('_', '-') === savedLang)
-        || voices.find(v => v.lang && (v.lang.toLowerCase().startsWith(langPrefix) || (langPrefix === 'id' && v.lang.toLowerCase().startsWith('in'))))
-        || voices.find(v => v.name && (v.name.toLowerCase().includes('indonesia') || v.name.toLowerCase().includes('bahasa')))
-        || voices.find(v => v.default)
-        || voices[0];
+    // Prioritas 1: Suara Google Bahasa Indonesia (Google Indonesian Voice)
+    idVoice = voices.find(v => {
+        const name = (v.name || '').toLowerCase();
+        const lang = (v.lang || '').toLowerCase().replace('_', '-');
+        const isIndo = lang.startsWith('id') || lang.startsWith('in') || name.includes('indonesia') || name.includes('bahasa');
+        return isIndo && name.includes('google');
+    })
+    // Prioritas 2: Suara Google untuk bahasa terpilih
+    || voices.find(v => (v.name || '').toLowerCase().includes('google') && v.lang && v.lang.toLowerCase().startsWith(langPrefix))
+    // Prioritas 3: Suara Google lainnya
+    || voices.find(v => (v.name || '').toLowerCase().includes('google'))
+    // Prioritas 4: Bahasa Indonesia lainnya (id-ID atau in-ID)
+    || voices.find(v => v.lang === savedLang || v.lang.replace('_', '-') === savedLang)
+    || voices.find(v => v.lang && (v.lang.toLowerCase().startsWith(langPrefix) || (langPrefix === 'id' && v.lang.toLowerCase().startsWith('in'))))
+    || voices.find(v => v.name && (v.name.toLowerCase().includes('indonesia') || v.name.toLowerCase().includes('bahasa')))
+    // Prioritas 5: Default browser voice
+    || voices.find(v => v.default)
+    || voices[0];
 }
 
 /**
@@ -112,7 +125,10 @@ export function playChimeSound() {
     } catch (e) {}
 }
 
-function doSpeak(text) {
+/**
+ * Fallback Web Speech API (with Google Bahasa Indonesia as primary voice)
+ */
+function speakWebSpeech(text) {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
         playClickSound(880);
         return;
@@ -191,6 +207,11 @@ function doSpeak(text) {
     }
 }
 
+/**
+ * Main Speak Function:
+ * Prioritizes authentic Google Bahasa Indonesia voice stream on both desktop & mobile.
+ * Automatically falls back to Web Speech API (Google voice) if offline/blocked.
+ */
 export function speak(text) {
     if (localStorage.getItem('tactipad_audio') === 'false') return;
     if (!text || typeof window === 'undefined') return;
@@ -202,20 +223,77 @@ export function speak(text) {
         }
     } catch (e) {}
 
-    if (!('speechSynthesis' in window)) {
-        playClickSound(880);
-        return;
+    // Stop previous audio if playing
+    if (currentAudio) {
+        try {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        } catch (e) {}
+        currentAudio = null;
     }
 
-    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+    // Cancel ongoing web speech
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         try {
-            window.speechSynthesis.cancel();
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
         } catch (e) {}
-        setTimeout(() => {
-            doSpeak(text);
-        }, 50);
-    } else {
-        doSpeak(text);
+    }
+
+    const savedLang = localStorage.getItem('tactipad_lang') || 'id-ID';
+    const langCode = savedLang.split('-')[0].toLowerCase();
+    const encoded = encodeURIComponent(text.trim());
+
+    // Stream Authentic Google Bahasa Indonesia Audio
+    try {
+        const audio = new Audio();
+        currentAudio = audio;
+
+        const rawVol = localStorage.getItem('tactipad_volume');
+        let vol = 1.0;
+        if (rawVol !== null) {
+            const p = parseFloat(rawVol);
+            if (!isNaN(p)) vol = p > 1 ? p / 100 : p;
+        }
+        audio.volume = Math.max(0.1, Math.min(1.0, vol));
+
+        const savedRate = parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
+        audio.playbackRate = isNaN(savedRate) ? 1.0 : Math.max(0.5, Math.min(2.0, savedRate));
+
+        // Primary: Same-origin Google TTS proxy stream
+        audio.src = `/tts?text=${encoded}&lang=${langCode}`;
+
+        let fallbackDone = false;
+        const triggerFallback = () => {
+            if (fallbackDone) return;
+            fallbackDone = true;
+            if (window.speechSynthesis && (window.speechSynthesis.speaking || window.speechSynthesis.pending)) {
+                try { window.speechSynthesis.cancel(); } catch (e) {}
+                setTimeout(() => speakWebSpeech(text), 50);
+            } else {
+                speakWebSpeech(text);
+            }
+        };
+
+        audio.onerror = () => {
+            // Direct Google fallback if proxy has an issue
+            audio.onerror = () => triggerFallback();
+            audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encoded}`;
+            const retryPromise = audio.play();
+            if (retryPromise !== undefined) {
+                retryPromise.catch(() => triggerFallback());
+            }
+        };
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                triggerFallback();
+            });
+        }
+    } catch (e) {
+        speakWebSpeech(text);
     }
 }
 
