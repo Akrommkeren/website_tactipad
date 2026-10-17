@@ -47,14 +47,11 @@
                             </button>
                             
                             <!-- Submenu Huruf -->
-                            <div id="submenuHuruf" class="submenu-panel submenu-flyout hidden sm:group-hover/huruf:block sm:absolute sm:left-full sm:top-0 sm:ml-1.5 w-full sm:w-44 rounded-xl sm:rounded-2xl bg-slate-50 sm:bg-white border sm:border-slate-200 shadow-inner sm:shadow-xl py-1 sm:py-2 z-50">
-                                <button type="button" data-val="huruf" data-label="Semua Huruf" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
-                                    Semua Huruf
-                                </button>
-                                <button type="button" data-val="huruf_single" data-label="Huruf A-Z" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
+                            <div id="submenuHuruf" class="submenu-panel submenu-flyout hidden sm:group-hover/huruf:block sm:absolute sm:left-full sm:top-0 sm:ml-1.5 w-full sm:w-44 sm:rounded-2xl sm:bg-white sm:border sm:border-slate-200 sm:shadow-xl py-0.5 sm:py-2 z-50">
+                                <button type="button" data-val="huruf_single" data-label="Huruf A-Z" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Huruf A-Z
                                 </button>
-                                <button type="button" data-val="kata_5" data-label="Kata 5 Huruf" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
+                                <button type="button" data-val="kata_5" data-label="Kata 5 Huruf" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Kata 5 Huruf
                                 </button>
                             </div>
@@ -72,14 +69,11 @@
                             </button>
 
                             <!-- Submenu Angka -->
-                            <div id="submenuAngka" class="submenu-panel submenu-flyout hidden sm:group-hover/angka:block sm:absolute sm:left-full sm:top-0 sm:ml-1.5 w-full sm:w-44 rounded-xl sm:rounded-2xl bg-slate-50 sm:bg-white border sm:border-slate-200 shadow-inner sm:shadow-xl py-1 sm:py-2 z-50">
-                                <button type="button" data-val="angka" data-label="Semua Angka" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
-                                    Semua Angka
-                                </button>
-                                <button type="button" data-val="angka_single" data-label="Angka 0-9" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
+                            <div id="submenuAngka" class="submenu-panel submenu-flyout hidden sm:group-hover/angka:block sm:absolute sm:left-full sm:top-0 sm:ml-1.5 w-full sm:w-44 sm:rounded-2xl sm:bg-white sm:border sm:border-slate-200 sm:shadow-xl py-0.5 sm:py-2 z-50">
+                                <button type="button" data-val="angka_single" data-label="Angka 0-9" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Angka 0-9
                                 </button>
-                                <button type="button" data-val="angka_5" data-label="Angka 5 Digit" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
+                                <button type="button" data-val="angka_5" data-label="Angka 5 Digit" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Angka 5 Digit
                                 </button>
                             </div>

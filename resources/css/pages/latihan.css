@@ -63,8 +63,7 @@
 
 /* Dark Theme for Latihan Page */
 body.dark-theme #filterDropdownMenu,
-body.dark-theme .submenu-flyout,
-body.dark-theme .submenu-panel {
+body.dark-theme .submenu-flyout {
     background-color: #111c38 !important;
     border-color: #1e2b47 !important;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
@@ -79,22 +78,6 @@ body.dark-theme .filter-item:hover,
 body.dark-theme .submenu-toggle-btn:hover {
     background-color: #1e293b !important;
     color: #60a5fa !important;
-}
-
-/* Submenu on Mobile vs Desktop */
-@media (max-width: 639px) {
-    .submenu-panel {
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
-        padding-left: 0.5rem;
-        border-left: 3px solid #2563eb !important;
-        background-color: #f1f5f9 !important;
-        border-radius: 0.75rem !important;
-    }
-    body.dark-theme .submenu-panel {
-        border-left-color: #3b82f6 !important;
-        background-color: #0b1326 !important;
-    }
 }
 
 body.dark-theme .dot-clean-empty {
