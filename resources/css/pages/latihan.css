@@ -51,6 +51,18 @@
     color: #ffffff !important;
 }
 
+/* Hover bridge for desktop flyout submenus */
+@media (min-width: 640px) {
+    .submenu-flyout::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -12px;
+        width: 14px;
+        height: 100%;
+    }
+}
+
 /* Dark Theme for Latihan Page */
 body.dark-theme #filterDropdownBtn {
     background-color: #111c38 !important;
@@ -58,10 +70,24 @@ body.dark-theme #filterDropdownBtn {
     color: #e2e8f0 !important;
 }
 
-body.dark-theme #filterDropdownMenu {
+body.dark-theme #filterDropdownMenu,
+body.dark-theme .submenu-panel {
     background-color: #111c38 !important;
     border-color: #1e2b47 !important;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+@media (max-width: 639px) {
+    .submenu-panel {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    body.dark-theme .submenu-panel {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
 }
 
 body.dark-theme .filter-item,

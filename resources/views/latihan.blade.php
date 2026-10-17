@@ -37,8 +37,8 @@
 
                         <div class="my-1 border-t border-slate-100"></div>
 
-                        <!-- Option 2: Soal Huruf -->
-                        <div class="relative" id="groupHuruf">
+                        <!-- Option 2: Soal Huruf with Cascading Submenu on Desktop (Right Side) / Accordion on Mobile -->
+                        <div class="relative group/huruf" id="groupHuruf">
                             <button type="button" id="toggleHurufSubmenuBtn" class="submenu-toggle-btn w-full text-left px-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-700 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-between touch-manipulation">
                                 <span>Soal Huruf</span>
                                 <svg id="chevronHuruf" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,12 +46,12 @@
                                 </svg>
                             </button>
                             
-                            <!-- Submenu Huruf -->
-                            <div id="submenuHuruf" class="submenu-panel hidden py-0.5 space-y-0.5">
-                                <button type="button" data-val="huruf_single" data-label="Huruf A-Z" class="filter-item w-full text-left pl-7 pr-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
+                            <!-- Submenu Huruf: Mobile (Inline under button) vs Desktop (Disebelah Kanannya) -->
+                            <div id="submenuHuruf" class="submenu-panel submenu-flyout hidden sm:group-hover/huruf:block sm:absolute sm:left-full sm:top-0 sm:ml-2 sm:w-48 sm:rounded-2xl sm:bg-white sm:border sm:border-slate-200 sm:shadow-xl py-0.5 sm:py-2 z-50">
+                                <button type="button" data-val="huruf_single" data-label="Huruf A-Z" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 sm:text-slate-700 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
                                     Huruf A-Z
                                 </button>
-                                <button type="button" data-val="kata_5" data-label="Kata 5 Huruf" class="filter-item w-full text-left pl-7 pr-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
+                                <button type="button" data-val="kata_5" data-label="Kata 5 Huruf" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 sm:text-slate-700 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
                                     Kata 5 Huruf
                                 </button>
                             </div>
@@ -59,8 +59,8 @@
 
                         <div class="my-1 border-t border-slate-100"></div>
 
-                        <!-- Option 3: Soal Angka -->
-                        <div class="relative" id="groupAngka">
+                        <!-- Option 3: Soal Angka with Cascading Submenu on Desktop (Right Side) / Accordion on Mobile -->
+                        <div class="relative group/angka" id="groupAngka">
                             <button type="button" id="toggleAngkaSubmenuBtn" class="submenu-toggle-btn w-full text-left px-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-700 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-between touch-manipulation">
                                 <span>Soal Angka</span>
                                 <svg id="chevronAngka" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,12 +68,12 @@
                                 </svg>
                             </button>
 
-                            <!-- Submenu Angka -->
-                            <div id="submenuAngka" class="submenu-panel hidden py-0.5 space-y-0.5">
-                                <button type="button" data-val="angka_single" data-label="Angka 0-9" class="filter-item w-full text-left pl-7 pr-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
+                            <!-- Submenu Angka: Mobile (Inline under button) vs Desktop (Disebelah Kanannya) -->
+                            <div id="submenuAngka" class="submenu-panel submenu-flyout hidden sm:group-hover/angka:block sm:absolute sm:left-full sm:top-0 sm:ml-2 sm:w-48 sm:rounded-2xl sm:bg-white sm:border sm:border-slate-200 sm:shadow-xl py-0.5 sm:py-2 z-50">
+                                <button type="button" data-val="angka_single" data-label="Angka 0-9" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 sm:text-slate-700 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
                                     Angka 0-9
                                 </button>
-                                <button type="button" data-val="angka_5" data-label="Angka 5 Digit" class="filter-item w-full text-left pl-7 pr-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
+                                <button type="button" data-val="angka_5" data-label="Angka 5 Digit" class="filter-item w-full text-left pl-7 pr-4 sm:px-4 py-2 text-xs sm:text-sm font-semibold hover:font-black text-slate-600 sm:text-slate-700 hover:text-slate-900 transition-all cursor-pointer block touch-manipulation">
                                     Angka 5 Digit
                                 </button>
                             </div>
