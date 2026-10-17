@@ -2,7 +2,7 @@
  * TACTIPAD: Halaman Pengaturan (Web Bluetooth API, Audio Preferences, & System Tools)
  */
 
-import { playChimeSound, speak } from '../core/tts';
+import { playChimeSound, speak, setAudioRate, setAudioVolume } from '../core/tts';
 
 export function initPengaturanPage() {
     // LocalStorage State
@@ -68,6 +68,15 @@ export function initPengaturanPage() {
             speechVolume = val / 100;
             volumeValueText.textContent = val + '%';
             localStorage.setItem('tactipad_volume', speechVolume);
+            setAudioVolume(speechVolume);
+        });
+        speechVolumeSlider.addEventListener('change', (e) => {
+            const val = parseInt(e.target.value, 10);
+            speechVolume = val / 100;
+            localStorage.setItem('tactipad_volume', speechVolume);
+            if (isAudioOn) {
+                speak(`Volume ${val} persen`);
+            }
         });
     }
 
@@ -78,6 +87,14 @@ export function initPengaturanPage() {
             speechRate = parseFloat(e.target.value);
             rateValueText.textContent = speechRate.toFixed(1) + 'x';
             localStorage.setItem('tactipad_rate', speechRate);
+            setAudioRate(speechRate);
+        });
+        speechRateSlider.addEventListener('change', (e) => {
+            speechRate = parseFloat(e.target.value);
+            localStorage.setItem('tactipad_rate', speechRate);
+            if (isAudioOn) {
+                speak(`Kecepatan ${speechRate.toFixed(1)}`);
+            }
         });
     }
 

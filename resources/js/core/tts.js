@@ -128,7 +128,7 @@ export function playChimeSound() {
 /**
  * Fallback Web Speech API (with Google Bahasa Indonesia as primary voice)
  */
-function speakWebSpeech(text) {
+function speakWebSpeech(text, targetRate = null, targetVol = null) {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
         playClickSound(880);
         return;
@@ -180,17 +180,19 @@ function speakWebSpeech(text) {
         }
 
         // Safe volume parsing (handles 0-1 and 0-100 formats)
-        const rawVol = localStorage.getItem('tactipad_volume');
-        let vol = 1.0;
-        if (rawVol !== null) {
-            const p = parseFloat(rawVol);
-            if (!isNaN(p)) {
-                vol = p > 1 ? p / 100 : p;
+        let vol = targetVol !== null ? targetVol : 1.0;
+        if (targetVol === null) {
+            const rawVol = localStorage.getItem('tactipad_volume');
+            if (rawVol !== null) {
+                const p = parseFloat(rawVol);
+                if (!isNaN(p)) {
+                    vol = p > 1 ? p / 100 : p;
+                }
             }
         }
         utter.volume = Math.max(0.1, Math.min(1.0, vol));
 
-        const savedRate = parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
+        const savedRate = targetRate !== null ? targetRate : parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
         utter.rate = isNaN(savedRate) ? 1.0 : Math.max(0.5, Math.min(2.0, savedRate));
 
         const savedPitch = parseFloat(localStorage.getItem('tactipad_pitch') || '1.0');
@@ -207,12 +209,32 @@ function speakWebSpeech(text) {
     }
 }
 
+export function setAudioRate(newRate) {
+    const rate = parseFloat(newRate);
+    if (!isNaN(rate) && currentAudio) {
+        try {
+            currentAudio.defaultPlaybackRate = rate;
+            currentAudio.playbackRate = rate;
+        } catch (e) {}
+    }
+}
+
+export function setAudioVolume(newVol) {
+    const vol = parseFloat(newVol);
+    if (!isNaN(vol) && currentAudio) {
+        try {
+            currentAudio.volume = Math.max(0, Math.min(1.0, vol));
+        } catch (e) {}
+    }
+}
+
 /**
  * Main Speak Function:
  * Prioritizes authentic Google Bahasa Indonesia voice stream on both desktop & mobile.
+ * Accurately honors and applies playbackRate across all lifecycle events.
  * Automatically falls back to Web Speech API (Google voice) if offline/blocked.
  */
-export function speak(text) {
+export function speak(text, customRate = null) {
     if (localStorage.getItem('tactipad_audio') === 'false') return;
     if (!text || typeof window === 'undefined') return;
 
@@ -245,24 +267,56 @@ export function speak(text) {
     const langCode = savedLang.split('-')[0].toLowerCase();
     const encoded = encodeURIComponent(text.trim());
 
+    // Calculate target rate and volume
+    const rawRate = customRate !== null ? customRate : parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
+    const targetRate = isNaN(rawRate) ? 1.0 : Math.max(0.5, Math.min(2.0, rawRate));
+
+    const rawVol = localStorage.getItem('tactipad_volume');
+    let targetVol = 1.0;
+    if (rawVol !== null) {
+        const p = parseFloat(rawVol);
+        if (!isNaN(p)) targetVol = p > 1 ? p / 100 : p;
+    }
+    targetVol = Math.max(0.1, Math.min(1.0, targetVol));
+
     // Stream Authentic Google Bahasa Indonesia Audio
     try {
         const audio = new Audio();
         currentAudio = audio;
 
-        const rawVol = localStorage.getItem('tactipad_volume');
-        let vol = 1.0;
-        if (rawVol !== null) {
-            const p = parseFloat(rawVol);
-            if (!isNaN(p)) vol = p > 1 ? p / 100 : p;
-        }
-        audio.volume = Math.max(0.1, Math.min(1.0, vol));
+        audio.volume = targetVol;
+        audio.defaultPlaybackRate = targetRate;
 
-        const savedRate = parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
-        audio.playbackRate = isNaN(savedRate) ? 1.0 : Math.max(0.5, Math.min(2.0, savedRate));
+        // Ensure playbackRate is strictly applied and pitch is preserved
+        const enforcePlaybackRate = () => {
+            try {
+                audio.defaultPlaybackRate = targetRate;
+                audio.playbackRate = targetRate;
+                if ('preservesPitch' in audio) {
+                    audio.preservesPitch = true;
+                } else if ('mozPreservesPitch' in audio) {
+                    audio.mozPreservesPitch = true;
+                } else if ('webkitPreservesPitch' in audio) {
+                    audio.webkitPreservesPitch = true;
+                }
+            } catch (e) {}
+        };
 
-        // Primary: Same-origin Google TTS proxy stream
+        // Attach listeners across all lifecycle events
+        audio.addEventListener('loadstart', enforcePlaybackRate);
+        audio.addEventListener('loadedmetadata', enforcePlaybackRate);
+        audio.addEventListener('canplay', enforcePlaybackRate);
+        audio.addEventListener('play', enforcePlaybackRate);
+        audio.addEventListener('playing', enforcePlaybackRate);
+        audio.addEventListener('ended', () => {
+            if (currentAudio === audio) {
+                currentAudio = null;
+            }
+        });
+
+        // Set src AFTER setting defaultPlaybackRate & listeners
         audio.src = `/tts?text=${encoded}&lang=${langCode}`;
+        enforcePlaybackRate();
 
         let fallbackDone = false;
         const triggerFallback = () => {
@@ -270,9 +324,9 @@ export function speak(text) {
             fallbackDone = true;
             if (window.speechSynthesis && (window.speechSynthesis.speaking || window.speechSynthesis.pending)) {
                 try { window.speechSynthesis.cancel(); } catch (e) {}
-                setTimeout(() => speakWebSpeech(text), 50);
+                setTimeout(() => speakWebSpeech(text, targetRate, targetVol), 50);
             } else {
-                speakWebSpeech(text);
+                speakWebSpeech(text, targetRate, targetVol);
             }
         };
 
@@ -280,20 +334,25 @@ export function speak(text) {
             // Direct Google fallback if proxy has an issue
             audio.onerror = () => triggerFallback();
             audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encoded}`;
+            enforcePlaybackRate();
             const retryPromise = audio.play();
             if (retryPromise !== undefined) {
-                retryPromise.catch(() => triggerFallback());
+                retryPromise.then(() => {
+                    enforcePlaybackRate();
+                }).catch(() => triggerFallback());
             }
         };
 
         const playPromise = audio.play();
         if (playPromise !== undefined) {
-            playPromise.catch(() => {
+            playPromise.then(() => {
+                enforcePlaybackRate();
+            }).catch(() => {
                 triggerFallback();
             });
         }
     } catch (e) {
-        speakWebSpeech(text);
+        speakWebSpeech(text, targetRate, targetVol);
     }
 }
 

@@ -731,6 +731,8 @@ INOCONTENT;
             if ($audio !== false && strlen($audio) > 0) {
                 return response($audio, 200, [
                     'Content-Type' => 'audio/mpeg',
+                    'Content-Length' => strlen($audio),
+                    'Accept-Ranges' => 'bytes',
                     'Cache-Control' => 'public, max-age=86400',
                 ]);
             }
