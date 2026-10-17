@@ -2,13 +2,20 @@
  * TACTIPAD: Halaman Pengaturan (Web Bluetooth API, Audio Preferences, & System Tools)
  */
 
-import { speak } from '../core/tts';
+import { playChimeSound, speak } from '../core/tts';
 
 export function initPengaturanPage() {
     // LocalStorage State
     let isAudioOn = localStorage.getItem('tactipad_audio') !== 'false';
     let speechRate = parseFloat(localStorage.getItem('tactipad_rate') || '1.0');
-    let speechVolume = parseFloat(localStorage.getItem('tactipad_volume') !== null ? localStorage.getItem('tactipad_volume') : '1.0');
+    let rawVol = localStorage.getItem('tactipad_volume');
+    let speechVolume = 1.0;
+    if (rawVol !== null) {
+        let parsed = parseFloat(rawVol);
+        if (!isNaN(parsed)) {
+            speechVolume = parsed > 1 ? parsed / 100 : parsed;
+        }
+    }
     let selectedLang = localStorage.getItem('tactipad_lang') || 'id-ID';
 
     // DOM Elements - Audio
@@ -133,6 +140,7 @@ export function initPengaturanPage() {
     }
 
     testVoiceBtn?.addEventListener('click', () => {
+        playChimeSound();
         speak('Halo! Ini adalah uji coba suara sistem pembelajaran TACTIPAD.');
     });
 

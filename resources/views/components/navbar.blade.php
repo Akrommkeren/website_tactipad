@@ -51,18 +51,18 @@
     </div>
 
     <!-- Mobile Navigation Drawer -->
-    <div id="mobileNavMenu" class="hidden md:hidden px-4 pb-4 pt-1 border-t border-white/10 space-y-1 bg-blue-700/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl transition-all">
-        <a href="{{ route('tactipad.home') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-white transition hover:bg-white/15 {{ request()->routeIs('tactipad.home') ? 'bg-white/20' : 'opacity-90' }}">
-            <span>Braille (Papan Taktil)</span>
+    <div id="mobileNavMenu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-white/20 space-y-1 bg-blue-600/95 dark:bg-[#172554]/95 backdrop-blur-md shadow-xl transition-all">
+        <a href="{{ route('tactipad.home') }}" class="block py-2.5 text-sm text-white no-underline transition hover:text-white {{ request()->routeIs('tactipad.home') ? 'font-extrabold' : 'font-semibold text-white/85 hover:text-white hover:font-bold' }}">
+            Braille
         </a>
-        <a href="{{ route('tactipad.latihan') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-white transition hover:bg-white/15 {{ request()->routeIs('tactipad.latihan') ? 'bg-white/20' : 'opacity-90' }}">
-            <span>Latihan Soal</span>
+        <a href="{{ route('tactipad.latihan') }}" class="block py-2.5 text-sm text-white no-underline transition hover:text-white {{ request()->routeIs('tactipad.latihan') ? 'font-extrabold' : 'font-semibold text-white/85 hover:text-white hover:font-bold' }}">
+            Latihan Soal
         </a>
-        <a href="{{ route('tactipad.kamus') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-white transition hover:bg-white/15 {{ request()->routeIs('tactipad.kamus') ? 'bg-white/20' : 'opacity-90' }}">
-            <span>Tentang &amp; Kamus</span>
+        <a href="{{ route('tactipad.kamus') }}" class="block py-2.5 text-sm text-white no-underline transition hover:text-white {{ request()->routeIs('tactipad.kamus') ? 'font-extrabold' : 'font-semibold text-white/85 hover:text-white hover:font-bold' }}">
+            Tentang
         </a>
-        <a href="{{ route('tactipad.pengaturan') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-white transition hover:bg-white/15 {{ request()->routeIs('tactipad.pengaturan') ? 'bg-white/20' : 'opacity-90' }}">
-            <span>Pengaturan</span>
+        <a href="{{ route('tactipad.pengaturan') }}" class="block py-2.5 text-sm text-white no-underline transition hover:text-white {{ request()->routeIs('tactipad.pengaturan') ? 'font-extrabold' : 'font-semibold text-white/85 hover:text-white hover:font-bold' }}">
+            Pengaturan
         </a>
     </div>
 </header>

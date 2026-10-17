@@ -2,15 +2,17 @@
  * TACTIPAD: Halaman Kamus & Tentang (Card Click-to-Speech & Filter Dropdown)
  */
 
-import { speak } from '../core/tts';
+import { playChimeSound, speak } from '../core/tts';
 
 export function initKamusPage() {
     // Click card to speak
     document.querySelectorAll('.kamus-card').forEach(card => {
         card.addEventListener('click', () => {
+            playChimeSound();
+            const pronounce = card.getAttribute('data-pronounce');
             const name = card.getAttribute('data-name');
             const char = card.getAttribute('data-char');
-            speak(name || char);
+            speak(pronounce || name || char);
         });
     });
 

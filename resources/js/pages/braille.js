@@ -2,7 +2,7 @@
  * TACTIPAD: Halaman Braille (Papan Taktil Interaktif 5 Sel × 6 Titik)
  */
 
-import { getAudioContext, playClickSound, playResetClackSound, speak } from '../core/tts';
+import { getAudioContext, playChimeSound, playClickSound, playResetClackSound, speak } from '../core/tts';
 
 export function initBraillePage() {
     const initialState = window.TACTIPAD_INITIAL_STATE || {};
@@ -170,7 +170,8 @@ export function initBraillePage() {
     }
 
     function speakCurrentWord() {
-        const cleanWord = state.word.replace(/\s+/g, '');
+        playChimeSound();
+        const cleanWord = state.word.replace(/[\s_]+/g, '');
         if (!cleanWord) {
             speakText('Papan masih kosong.');
             return;

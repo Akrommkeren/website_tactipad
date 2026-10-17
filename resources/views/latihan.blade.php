@@ -20,7 +20,7 @@
                 
                 <!-- Custom Filter Dropdown -->
                 <div class="relative" id="filterDropdownContainer">
-                    <button type="button" id="filterDropdownBtn" class="inline-flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-blue-500 text-xs sm:text-sm font-bold text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition cursor-pointer min-w-[170px]">
+                    <button type="button" id="filterDropdownBtn" class="inline-flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-blue-500 text-xs sm:text-sm font-bold text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition cursor-pointer min-w-[170px] touch-manipulation">
                         <span id="currentFilterLabel">Semua Soal</span>
                         <svg class="w-4 h-4 text-slate-500 transition-transform duration-200" id="filterChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -28,30 +28,33 @@
                     </button>
 
                     <!-- Main Dropdown Menu Panel -->
-                    <div id="filterDropdownMenu" class="hidden absolute left-0 mt-1.5 w-48 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50">
+                    <div id="filterDropdownMenu" class="hidden absolute left-0 mt-1.5 w-52 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50">
                         
                         <!-- Option 1: Semua Soal -->
-                        <button type="button" data-val="all" data-label="Semua Soal" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer flex items-center justify-between">
+                        <button type="button" data-val="all" data-label="Semua Soal" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer flex items-center justify-between touch-manipulation">
                             <span>Semua Soal</span>
                         </button>
 
                         <div class="my-1 border-t border-slate-100"></div>
 
-                        <!-- Option 2: Soal Huruf with Cascading Submenu on Hover -->
-                        <div class="relative group/huruf">
-                            <button type="button" data-val="huruf" data-label="Soal Huruf" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer flex items-center justify-between">
+                        <!-- Option 2: Soal Huruf with Cascading Submenu on Hover / Accordion on Mobile -->
+                        <div class="relative group/huruf" id="groupHuruf">
+                            <button type="button" id="toggleHurufSubmenuBtn" class="submenu-toggle-btn w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer flex items-center justify-between touch-manipulation">
                                 <span>Soal Huruf</span>
-                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover/huruf:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg id="chevronHuruf" class="w-3.5 h-3.5 text-slate-400 group-hover/huruf:text-blue-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
                             </button>
                             
-                            <!-- Submenu Huruf (Flyout to the right) -->
-                            <div class="submenu-flyout hidden group-hover/huruf:block absolute left-full top-0 ml-1.5 w-44 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50">
-                                <button type="button" data-val="huruf_single" data-label="Huruf A-Z" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block">
+                            <!-- Submenu Huruf -->
+                            <div id="submenuHuruf" class="submenu-panel submenu-flyout hidden sm:group-hover/huruf:block sm:absolute sm:left-full sm:top-0 sm:ml-1.5 w-full sm:w-44 rounded-xl sm:rounded-2xl bg-slate-50 sm:bg-white border sm:border-slate-200 shadow-inner sm:shadow-xl py-1 sm:py-2 z-50">
+                                <button type="button" data-val="huruf" data-label="Semua Huruf" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
+                                    Semua Huruf
+                                </button>
+                                <button type="button" data-val="huruf_single" data-label="Huruf A-Z" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Huruf A-Z
                                 </button>
-                                <button type="button" data-val="kata_5" data-label="Kata 5 Huruf" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block">
+                                <button type="button" data-val="kata_5" data-label="Kata 5 Huruf" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Kata 5 Huruf
                                 </button>
                             </div>
@@ -59,21 +62,24 @@
 
                         <div class="my-1 border-t border-slate-100"></div>
 
-                        <!-- Option 3: Soal Angka with Cascading Submenu on Hover -->
-                        <div class="relative group/angka">
-                            <button type="button" data-val="angka" data-label="Soal Angka" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer flex items-center justify-between">
+                        <!-- Option 3: Soal Angka with Cascading Submenu on Hover / Accordion on Mobile -->
+                        <div class="relative group/angka" id="groupAngka">
+                            <button type="button" id="toggleAngkaSubmenuBtn" class="submenu-toggle-btn w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer flex items-center justify-between touch-manipulation">
                                 <span>Soal Angka</span>
-                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover/angka:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg id="chevronAngka" class="w-3.5 h-3.5 text-slate-400 group-hover/angka:text-blue-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
                             </button>
 
-                            <!-- Submenu Angka (Flyout to the right) -->
-                            <div class="submenu-flyout hidden group-hover/angka:block absolute left-full top-0 ml-1.5 w-44 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50">
-                                <button type="button" data-val="angka_single" data-label="Angka 0-9" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block">
+                            <!-- Submenu Angka -->
+                            <div id="submenuAngka" class="submenu-panel submenu-flyout hidden sm:group-hover/angka:block sm:absolute sm:left-full sm:top-0 sm:ml-1.5 w-full sm:w-44 rounded-xl sm:rounded-2xl bg-slate-50 sm:bg-white border sm:border-slate-200 shadow-inner sm:shadow-xl py-1 sm:py-2 z-50">
+                                <button type="button" data-val="angka" data-label="Semua Angka" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
+                                    Semua Angka
+                                </button>
+                                <button type="button" data-val="angka_single" data-label="Angka 0-9" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Angka 0-9
                                 </button>
-                                <button type="button" data-val="angka_5" data-label="Angka 5 Digit" class="filter-item w-full text-left px-4 py-2.5 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-bold text-slate-700 transition cursor-pointer block">
+                                <button type="button" data-val="angka_5" data-label="Angka 5 Digit" class="filter-item w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-700 text-xs sm:text-sm font-semibold text-slate-700 transition cursor-pointer block touch-manipulation">
                                     Angka 5 Digit
                                 </button>
                             </div>

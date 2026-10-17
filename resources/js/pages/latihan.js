@@ -2,7 +2,7 @@
  * TACTIPAD: Halaman Latihan Soal Braille (Quiz Engine & Interactive Practice)
  */
 
-import { speak } from '../core/tts';
+import { playChimeSound, speak } from '../core/tts';
 
 export function initLatihanPage() {
     // 26 Standard Indonesian Braille Letters
@@ -156,7 +156,59 @@ export function initLatihanPage() {
     const speakQuestionBtn = document.getElementById('speakQuestionBtn');
     const restartPracticeBtn = document.getElementById('restartPracticeBtn');
 
+    // Submenu elements
+    const toggleHurufSubmenuBtn = document.getElementById('toggleHurufSubmenuBtn');
+    const submenuHuruf = document.getElementById('submenuHuruf');
+    const chevronHuruf = document.getElementById('chevronHuruf');
+
+    const toggleAngkaSubmenuBtn = document.getElementById('toggleAngkaSubmenuBtn');
+    const submenuAngka = document.getElementById('submenuAngka');
+    const chevronAngka = document.getElementById('chevronAngka');
+
     if (!filterDropdownBtn || !singleCellBoard) return;
+
+    function closeSubmenus() {
+        if (submenuHuruf) submenuHuruf.classList.add('hidden');
+        if (chevronHuruf) chevronHuruf.classList.remove('rotate-90');
+        if (submenuAngka) submenuAngka.classList.add('hidden');
+        if (chevronAngka) chevronAngka.classList.remove('rotate-90');
+    }
+
+    // Toggle Submenu Huruf (Mobile & Desktop Click)
+    if (toggleHurufSubmenuBtn && submenuHuruf) {
+        toggleHurufSubmenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = submenuHuruf.classList.contains('hidden');
+            if (submenuAngka) submenuAngka.classList.add('hidden');
+            if (chevronAngka) chevronAngka.classList.remove('rotate-90');
+
+            if (isHidden) {
+                submenuHuruf.classList.remove('hidden');
+                if (chevronHuruf) chevronHuruf.classList.add('rotate-90');
+            } else {
+                submenuHuruf.classList.add('hidden');
+                if (chevronHuruf) chevronHuruf.classList.remove('rotate-90');
+            }
+        });
+    }
+
+    // Toggle Submenu Angka (Mobile & Desktop Click)
+    if (toggleAngkaSubmenuBtn && submenuAngka) {
+        toggleAngkaSubmenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = submenuAngka.classList.contains('hidden');
+            if (submenuHuruf) submenuHuruf.classList.add('hidden');
+            if (chevronHuruf) chevronHuruf.classList.remove('rotate-90');
+
+            if (isHidden) {
+                submenuAngka.classList.remove('hidden');
+                if (chevronAngka) chevronAngka.classList.add('rotate-90');
+            } else {
+                submenuAngka.classList.add('hidden');
+                if (chevronAngka) chevronAngka.classList.remove('rotate-90');
+            }
+        });
+    }
 
     // Dropdown Toggle
     filterDropdownBtn.addEventListener('click', (e) => {
@@ -168,6 +220,7 @@ export function initLatihanPage() {
         } else {
             filterDropdownMenu.classList.add('hidden');
             filterChevron.classList.remove('rotate-180');
+            closeSubmenus();
         }
     });
 
@@ -176,6 +229,7 @@ export function initLatihanPage() {
         if (filterDropdownContainer && !filterDropdownContainer.contains(e.target)) {
             filterDropdownMenu.classList.add('hidden');
             filterChevron.classList.remove('rotate-180');
+            closeSubmenus();
         }
     });
 
@@ -212,11 +266,12 @@ export function initLatihanPage() {
             if (currentFilterLabel) currentFilterLabel.textContent = label;
             filterDropdownMenu.classList.add('hidden');
             if (filterChevron) filterChevron.classList.remove('rotate-180');
-            applyFilter();
+            closeSubmenus();
+            applyFilter(true);
         });
     });
 
-    function applyFilter() {
+    function applyFilter(shouldSpeak = false) {
         if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
 
         currentFilteredQuestions = ALL_QUESTIONS.filter(q => {
@@ -228,10 +283,10 @@ export function initLatihanPage() {
         currentQuestionIndex = 0;
         if (feedbackBanner) feedbackBanner.classList.add('hidden');
         checkCompletionStatus();
-        loadCurrentQuestion();
+        loadCurrentQuestion(shouldSpeak);
     }
 
-    function loadCurrentQuestion() {
+    function loadCurrentQuestion(shouldSpeak = false) {
         if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
         if (currentFilteredQuestions.length === 0) return;
 
@@ -253,7 +308,9 @@ export function initLatihanPage() {
         }
 
         renderAllDots();
-        speak(`Bentuklah pola untuk ${q.pronounce}`);
+        if (shouldSpeak) {
+            speak(`Bentuklah pola untuk ${q.pronounce}`);
+        }
     }
 
     // Dot interaction
@@ -413,7 +470,7 @@ export function initLatihanPage() {
         } else {
             currentQuestionIndex = currentFilteredQuestions.length - 1;
         }
-        loadCurrentQuestion();
+        loadCurrentQuestion(true);
     });
 
     nextQuestionBtn?.addEventListener('click', () => {
@@ -423,10 +480,12 @@ export function initLatihanPage() {
         } else {
             currentQuestionIndex = 0;
         }
-        loadCurrentQuestion();
+        loadCurrentQuestion(true);
     });
 
-    speakQuestionBtn?.addEventListener('click', () => {
+    speakQuestionBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        playChimeSound();
         const q = currentFilteredQuestions[currentQuestionIndex];
         if (q) speak(`Bentuklah pola titik Braille untuk ${q.pronounce}`);
     });

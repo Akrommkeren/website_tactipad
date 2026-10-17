@@ -81,3 +81,21 @@ header nav a:active {
     color: #ffffff !important;
     text-decoration: none !important;
 }
+
+/* Mobile Nav Menu Drawer */
+#mobileNavMenu {
+    background-color: rgba(37, 99, 235, 0.98) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-theme #mobileNavMenu {
+    background-color: rgba(23, 37, 84, 0.98) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#mobileNavMenu a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
